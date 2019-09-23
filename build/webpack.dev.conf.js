@@ -79,7 +79,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     new HtmlWebpackPlugin({
       filename: 'index.html',
       // 模板路径
-      template: `${__dirname}src/index.html`,
+      template: utils.resolve('src/index.html'),
       // true/'head'/'body'/false 将所有资产注入到给定的模板中。当传递 true 或 'body' 时，所有 js 资源都将放在body元素的底部。默认false，将把脚本放在head元素中
       inject: true
     }),

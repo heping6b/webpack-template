@@ -50,8 +50,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    filename: utils.assetsPath('js/[name].[chunkhash:7].js'),
+    chunkFilename: utils.assetsPath('js/[id].[chunkhash:7].js')
   },
   plugins: [
     // https://www.webpackjs.com/plugins/define-plugin/
@@ -59,12 +59,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env.NODE_ENV': config.dev.NODE_ENV
     }),
 
-    // https://blog.csdn.net/qq_35585701/article/details/81041584
-    // Chunk.entrypoints: Use Chunks.groupsIterable and filter by instanceof Entrypoint instead
-    // 
     // extract css into its own file
     new ExtractTextPlugin({
-      filename: utils.assetsPath('css/[name].[contenthash].css'),
+      // filename: utils.assetsPath('css/[name].[contenthash].css'),
+      filename: utils.assetsPath('css/[name].[md5:contenthash:hex:8].css'),
       // Setting the following option to `false` will not extract CSS from codesplit chunks.
       // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
       // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
@@ -85,6 +83,8 @@ const webpackConfig = merge(baseWebpackConfig, {
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       template: 'index.html',
+      // 模板路径
+      template: utils.resolve('src/index.html'),
       inject: true,
       minify: {
         removeComments: true,
@@ -104,10 +104,10 @@ const webpackConfig = merge(baseWebpackConfig, {
     // https://www.webpackjs.com/plugins/module-concatenation-plugin/
     new webpack.optimize.ModuleConcatenationPlugin(),
 
-    // 将单个文件或整个目录复制到构建目录
+    // 将静态资源目录复制到发布的目录
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, '..', config.dev.assetsSubDirectory),
+        from: path.resolve(__dirname, '../static'),
         to: config.dev.assetsSubDirectory,
         ignore: ['.*']
       }
