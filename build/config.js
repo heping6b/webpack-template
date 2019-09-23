@@ -88,6 +88,7 @@ module.exports = {
     // 构建完成后查看bundle analyzer报告: npm运行构建 - 报告
     // 设置为 true 或 false ，打开或关闭
     // bundleAnalyzerReport: process.env.npm_config_report
-    bundleAnalyzerReport: true
+	// 设置为true时，会包8888端口被占用，端口未关闭导致
+    bundleAnalyzerReport: false
   }
 };
