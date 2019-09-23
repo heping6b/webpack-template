@@ -1,0 +1,20 @@
+// https://blog.zfanw.com/babel-js/
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        // https://babel.docschina.org/docs/en/babel-preset-env
+        "useBuiltIns": "entry",
+        "targets": "> 0.25%, not dead"
+      }
+    ]
+  ],
+  "plugins": [
+    "@babel/plugin-syntax-dynamic-import",
+    "@babel/plugin-transform-block-scoping",
+    "@babel/plugin-transform-classes",
+    "@babel/plugin-transform-object-assign",
+    "@babel/plugin-transform-runtime"
+  ]
+}
