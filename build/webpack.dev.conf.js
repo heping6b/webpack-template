@@ -75,13 +75,25 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // 在编译出现错误时，使用 NoEmitOnErrorsPlugin 来跳过输出阶段。这样可以确保输出资源不会包含错误。对于所有资源，统计资料(stat)的 emitted 标识都是 false
     new webpack.NoEmitOnErrorsPlugin(),
 
-    // https://github.com/ampedandwired/html-webpack-plugin
+    // generate dist index.html with correct asset hash for caching.
+    // you can customize output by editing /index.html
+    // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      filename: 'index.html',
+      template: 'index.html',
       // 模板路径
       template: utils.resolve('src/index.html'),
-      // true/'head'/'body'/false 将所有资产注入到给定的模板中。当传递 true 或 'body' 时，所有 js 资源都将放在body元素的底部。默认false，将把脚本放在head元素中
-      inject: true
+      inject: true,
+      minify: {
+        // removeComments: true,
+        // collapseWhitespace: true,
+        removeAttributeQuotes: false
+        // more options:
+        // https://github.com/kangax/html-minifier#options-quick-reference
+      },
+      chunks: ['manifest', 'vendors', 'app'],
+      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
+      // chunksSortMode: 'dependency'
+      chunksSortMode: 'manual'
     }),
 
     // 将静态资源目录复制到发布的目录

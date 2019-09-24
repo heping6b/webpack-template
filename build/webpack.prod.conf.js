@@ -13,31 +13,6 @@ const config = require('./config');
 const baseWebpackConfig = require('./webpack.base.conf');
 
 const webpackConfig = merge(baseWebpackConfig, {
-
-  // https://webpack.js.org/plugins/split-chunks-plugin/
-  optimization: {
-    // 采用splitChunks提取出entry chunk的chunk Group
-    splitChunks: {
-      cacheGroups: {
-        // 处理入口chunk
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          chunks: 'initial',
-          name: 'vendors',
-        },
-        // 处理异步chunk
-        'async-vendors': {
-          test: /[\\/]node_modules[\\/]/,
-          minChunks: 2,
-          chunks: 'async',
-          name: 'async-vendors'
-        }
-      }
-    },
-    // 为每个入口提取出webpack runtime模块
-    runtimeChunk: { name: 'manifest' }
-  },
-
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.sourceMap,
@@ -51,7 +26,7 @@ const webpackConfig = merge(baseWebpackConfig, {
   output: {
     path: config.build.assetsRoot,
     filename: utils.assetsPath('js/[name].[chunkhash:7].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash:7].js')
+    chunkFilename: utils.assetsPath('js/[name].[chunkhash:7].js')
   },
   plugins: [
     // https://www.webpackjs.com/plugins/define-plugin/
@@ -89,7 +64,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       minify: {
         removeComments: true,
         collapseWhitespace: true,
-        removeAttributeQuotes: true
+        removeAttributeQuotes: false
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },

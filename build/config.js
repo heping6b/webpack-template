@@ -15,10 +15,13 @@ module.exports = {
 
     // 静态资源文件夹
     assetsSubDirectory: 'assets',
-
+    /* 
+    devServer模式下
+      - assetsPublicPath：设置为`./`时报错，`127.0.0.1/:1 Refused to load the image 'http://127.0.0.1:3000/favicon.ico' because it violates the following Content Security Policy directive: "default-src 'none'". Note that 'img-src' was not explicitly set, so 'default-src' is used as a fallback.`
+    */
     // https://www.webpackjs.com/configuration/output/#output-publicpath
-    // 静态资源路径前缀，尽量别使用绝对路径，不然会怀疑人生
-    assetsPublicPath: './',
+    // 静态资源路径前缀
+    assetsPublicPath: '/',
 
     // https://www.webpackjs.com/configuration/dev-server/#devserver-proxy
     proxy: {},
@@ -27,7 +30,7 @@ module.exports = {
     host: '127.0.0.1',
 
     // 指定要监听请求的端口号
-    port: 8081,
+    port: 3000,
 
     // 自动打开浏览器
     autoOpenBrowser: true,
@@ -51,7 +54,7 @@ module.exports = {
     // 如果为 true，则eslint错误和警告也将显示在错误覆盖中
     showEslintErrorsInOverlay: false,
 
-    cssSourceMap: false
+    cssSourceMap: true
   },
 
   build: {
@@ -66,7 +69,7 @@ module.exports = {
     assetsSubDirectory: 'assets',
 
     // https://www.webpackjs.com/configuration/output/#output-publicpath
-    // 静态资源路径前缀，尽量别使用绝对路径，不然会怀疑人生
+    // 静态资源路径前缀
     assetsPublicPath: './',
 
     // source map
@@ -88,7 +91,7 @@ module.exports = {
     // 构建完成后查看bundle analyzer报告: npm运行构建 - 报告
     // 设置为 true 或 false ，打开或关闭
     // bundleAnalyzerReport: process.env.npm_config_report
-	// 设置为true时，会包8888端口被占用，端口未关闭导致
+    // 设置为true时，会包8888端口被占用，端口未关闭导致
     bundleAnalyzerReport: false
   }
 };
