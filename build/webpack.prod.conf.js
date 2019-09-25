@@ -85,8 +85,9 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      chunks: ['manifest', 'vendors', 'app'],
-      chunksSortMode: 'manual'
+      // chunks: ['manifest', 'vendors', 'app'],
+      // dependency : 按照不同文件的依赖关系排序
+      chunksSortMode: 'dependency'
     }),
 
     // https://www.webpackjs.com/plugins/hashed-module-ids-plugin/
