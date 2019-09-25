@@ -10,7 +10,7 @@ const createLintingRule = () => ({
   loader: 'eslint-loader',
   enforce: 'pre',
   include: [
-    resolve('src'), resolve('test')
+    resolve('src')
   ],
   options: {
     formatter: require('eslint-friendly-formatter'),
@@ -51,7 +51,7 @@ module.exports = {
 
   module: {
     rules: [
-      // ...(config.dev.useEslint ? [createLintingRule()] : []),
+      ...(config.dev.useEslint ? [createLintingRule()] : []),
       {
         test: /\.jsx?$/,
         loader: 'babel-loader',
