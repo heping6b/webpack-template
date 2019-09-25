@@ -5,6 +5,7 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const CleanWebpackPlugin = require("clean-webpack-plugin"); // 清理工作目录
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 抽离css，webpack v4.0 用法
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
@@ -58,8 +59,10 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env.NODE_ENV': config.dev.NODE_ENV
     }),
 
+    // new CleanWebpackPlugin(['dist']),
+
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:7].css',
+      filename: utils.assetsPath('css/[name].[contenthash:7].css'),
     }),
 
     // 压缩css
