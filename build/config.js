@@ -48,6 +48,9 @@ module.exports = {
     // https://www.webpackjs.com/configuration/devtool/#devtool
     devtool: 'cheap-module-eval-source-map',
 
+    // source map
+    sourceMap: true,
+
     // 是否启用语法检查
     useEslint: true,
 

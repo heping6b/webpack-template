@@ -1,9 +1,9 @@
 'use strict';
 
-const path = require('path')
-const config = require('./config')
-const ExtractTextPlugin = require('extract-text-webpack-plugin')
-const packageConfig = require('../package.json')
+const path = require('path');
+const config = require('./config');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const packageConfig = require('../package.json');
 
 exports.resolve = function (dir) {
   return path.join(__dirname, '..', dir)
@@ -20,23 +20,37 @@ exports.assetsPath = function (_path) {
 exports.cssLoaders = function (options) {
   options = options || {}
 
+  const styleLoader = {
+    loader: 'style-loader'
+  };
+
   const cssLoader = {
     loader: 'css-loader',
     options: {
       sourceMap: options.sourceMap
     }
-  }
+  };
 
   const postcssLoader = {
     loader: 'postcss-loader',
     options: {
+      ident: 'postcss',
+      plugins: [
+        require('autoprefixer')()
+      ],
       sourceMap: options.sourceMap
     }
-  }
+  };
 
   // generate loader string to be used with extract text plugin
   function generateLoaders(loader, loaderOptions) {
-    const loaders = options.usePostCSS ? [cssLoader, postcssLoader] : [cssLoader]
+    const loaders = [];
+    loaders.push(options.extract ? MiniCssExtractPlugin.loader : styleLoader);
+    loaders.push(cssLoader);
+
+    if (options.usePostCSS) {
+      loaders.push(postcssLoader);
+    }
 
     if (loader) {
       loaders.push({
@@ -46,23 +60,12 @@ exports.cssLoaders = function (options) {
         })
       })
     }
-
-    // Extract CSS when that option is specified
-    // (which is the case during production build)
-    if (options.extract) {
-      return ExtractTextPlugin.extract({
-        use: loaders,
-        // fallback: function () {}
-      });
-    } else {
-      return loaders;
-    }
+    return loaders;
   }
 
   // https://vue-loader.vuejs.org/en/configurations/extract-css.html
   return {
     css: generateLoaders(),
-    postcss: generateLoaders(),
     less: generateLoaders('less'),
     sass: generateLoaders('sass', { indentedSyntax: true }),
     scss: generateLoaders('sass'),

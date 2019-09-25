@@ -5,8 +5,9 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin');
+// const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 抽离css，webpack v4.0 用法
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const utils = require('./utils');
 const config = require('./config');
@@ -34,7 +35,7 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env.NODE_ENV': config.dev.NODE_ENV
     }),
 
-    // extract css into its own file
+    /* // extract css into its own file
     new ExtractTextPlugin({
       // filename: utils.assetsPath('css/[name].[contenthash].css'),
       filename: utils.assetsPath('css/[name].[md5:contenthash:hex:8].css'),
@@ -43,21 +44,37 @@ const webpackConfig = merge(baseWebpackConfig, {
       // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
       // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
       allChunks: true,
+    }), */
+
+    new MiniCssExtractPlugin({
+      filename: 'css/[name].[contenthash:8].css',
     }),
 
-    // Compress extracted CSS. We are using this plugin so that possible
+    /* // Compress extracted CSS. We are using this plugin so that possible
     // duplicated CSS from different components can be deduped.
-    new OptimizeCSSPlugin({
+    new OptimizeCssAssetsPlugin({
       cssProcessorOptions: config.build.productionSourceMap
         ? { safe: true, map: { inline: false } }
         : { safe: true }
+    }),
+    */
+
+    // 压缩css
+    new OptimizeCssAssetsPlugin({
+      // 官方给“/\.optimize\.css$/g”会导致css压缩失败，改为“/\.css$/g”
+      assetNameRegExp: /\.css$/g,
+      cssProcessor: require('cssnano'),
+      cssProcessorPluginOptions: {
+        preset: ['default', { discardComments: { removeAll: true } }],
+      },
+      canPrint: true
     }),
 
     // generate dist index.html with correct asset hash for caching.
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      filename: 'index.html',
       // 模板路径
       template: utils.resolve('src/index.html'),
       inject: true,
@@ -68,8 +85,8 @@ const webpackConfig = merge(baseWebpackConfig, {
         // more options:
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      chunksSortMode: 'dependency'
+      chunks: ['manifest', 'vendors', 'app'],
+      chunksSortMode: 'manual'
     }),
 
     // https://www.webpackjs.com/plugins/hashed-module-ids-plugin/

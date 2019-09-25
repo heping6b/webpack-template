@@ -17,7 +17,10 @@ const PORT = process.env.PORT && Number(process.env.PORT);
 
 const devWebpackConfig = merge(baseWebpackConfig, {
   module: {
-    rules: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, usePostCSS: true })
+    rules: utils.styleLoaders({
+      sourceMap: config.dev.sourceMap,
+      usePostCSS: true
+    })
   },
   devtool: config.dev.devtool,
 
@@ -79,7 +82,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     // you can customize output by editing /index.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
-      template: 'index.html',
+      filename: 'index.html',
       // 模板路径
       template: utils.resolve('src/index.html'),
       inject: true,
@@ -91,8 +94,6 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         // https://github.com/kangax/html-minifier#options-quick-reference
       },
       chunks: ['manifest', 'vendors', 'app'],
-      // necessary to consistently work with multiple chunks via CommonsChunkPlugin
-      // chunksSortMode: 'dependency'
       chunksSortMode: 'manual'
     }),
 
