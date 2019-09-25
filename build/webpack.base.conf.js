@@ -1,7 +1,6 @@
 'use strict';
 
 const path = require('path');
-
 const utils = require('./utils');
 const config = require('./config');
 const resolve = utils.resolve;
@@ -48,30 +47,6 @@ module.exports = {
     alias: {
       '@': resolve('src'),
     }
-  },
-
-  // https://webpack.js.org/plugins/split-chunks-plugin/
-  optimization: {
-    // 采用splitChunks提取出entry chunk的chunk Group
-    splitChunks: {
-      cacheGroups: {
-        // 处理入口chunk
-        vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          chunks: 'initial',
-          name: 'vendors',
-        },
-        // 处理异步chunk
-        'async-vendors': {
-          test: /[\\/]node_modules[\\/]/,
-          minChunks: 2,
-          chunks: 'async',
-          name: 'async-vendors'
-        }
-      }
-    },
-    // 为每个入口提取出webpack runtime模块
-    runtimeChunk: { name: 'manifest' }
   },
 
   module: {

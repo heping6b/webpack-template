@@ -5,7 +5,6 @@ const webpack = require('webpack');
 const merge = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-// const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin'); // 抽离css，webpack v4.0 用法
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
@@ -14,6 +13,30 @@ const config = require('./config');
 const baseWebpackConfig = require('./webpack.base.conf');
 
 const webpackConfig = merge(baseWebpackConfig, {
+  // https://webpack.js.org/plugins/split-chunks-plugin/
+  optimization: {
+    // 采用splitChunks提取出entry chunk的chunk Group
+    splitChunks: {
+      cacheGroups: {
+        // 处理入口chunk
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          chunks: 'initial',
+          name: 'vendors',
+        },
+        // 处理异步chunk
+        'async-vendors': {
+          test: /[\\/]node_modules[\\/]/,
+          minChunks: 2,
+          chunks: 'async',
+          name: 'async-vendors'
+        }
+      }
+    },
+    // 为每个入口提取出webpack runtime模块
+    runtimeChunk: { name: 'manifest' }
+  },
+
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.build.sourceMap,
@@ -35,29 +58,9 @@ const webpackConfig = merge(baseWebpackConfig, {
       'process.env.NODE_ENV': config.dev.NODE_ENV
     }),
 
-    /* // extract css into its own file
-    new ExtractTextPlugin({
-      // filename: utils.assetsPath('css/[name].[contenthash].css'),
-      filename: utils.assetsPath('css/[name].[md5:contenthash:hex:8].css'),
-      // Setting the following option to `false` will not extract CSS from codesplit chunks.
-      // Their CSS will instead be inserted dynamically with style-loader when the codesplit chunk has been loaded by webpack.
-      // It's currently set to `true` because we are seeing that sourcemaps are included in the codesplit bundle as well when it's `false`, 
-      // increasing file size: https://github.com/vuejs-templates/webpack/issues/1110
-      allChunks: true,
-    }), */
-
     new MiniCssExtractPlugin({
-      filename: 'css/[name].[contenthash:8].css',
+      filename: 'css/[name].[contenthash:7].css',
     }),
-
-    /* // Compress extracted CSS. We are using this plugin so that possible
-    // duplicated CSS from different components can be deduped.
-    new OptimizeCssAssetsPlugin({
-      cssProcessorOptions: config.build.productionSourceMap
-        ? { safe: true, map: { inline: false } }
-        : { safe: true }
-    }),
-    */
 
     // 压缩css
     new OptimizeCssAssetsPlugin({
@@ -82,11 +85,9 @@ const webpackConfig = merge(baseWebpackConfig, {
         removeComments: true,
         collapseWhitespace: true,
         removeAttributeQuotes: false
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
+        // more options: https://github.com/kangax/html-minifier#options-quick-reference
       },
-      // chunks: ['manifest', 'vendors', 'app'],
-      // dependency : 按照不同文件的依赖关系排序
+      // dependency 按照不同文件的依赖关系排序
       chunksSortMode: 'dependency'
     }),
 

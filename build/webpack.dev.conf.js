@@ -87,14 +87,9 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: utils.resolve('src/index.html'),
       inject: true,
       minify: {
-        // removeComments: true,
-        // collapseWhitespace: true,
         removeAttributeQuotes: false
-        // more options:
-        // https://github.com/kangax/html-minifier#options-quick-reference
       },
-      // chunks: ['manifest', 'vendors', 'app'],
-      // dependency : 按照不同文件的依赖关系排序
+      // dependency 按照不同文件的依赖关系排序
       chunksSortMode: 'dependency'
     }),
 
