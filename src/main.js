@@ -1,7 +1,8 @@
 import './index.less';
 
 console.log('entry');
-function a() {
+function a () {
   console.log('entry');
-
 }
+
+a();
