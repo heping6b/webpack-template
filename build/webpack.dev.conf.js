@@ -64,6 +64,21 @@ const devWebpackConfig = merge(baseWebpackConfig, {
   },
 
   plugins: [
+    /*
+    @link: https://www.webpackjs.com/plugins/loader-options-plugin/
+
+    Module build failed (from ./node_modules/eslint-loader/index.js):
+      TypeError: Cannot read property 'eslint' of undefined
+        at Object.module.exports (E:\project\webpack-template\node_modules\eslint-loader\index.js:148:18)
+    */
+    new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false,
+      options: {
+        context: __dirname
+      }
+    }),
+
     // https://www.webpackjs.com/plugins/define-plugin/
     new webpack.DefinePlugin({
       'process.env.NODE_ENV': config.dev.NODE_ENV
